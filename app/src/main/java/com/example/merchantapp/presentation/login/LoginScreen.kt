@@ -1,4 +1,5 @@
 package com.example.merchantapp.presentation.login
+
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -35,7 +36,11 @@ import com.example.merchantapp.ui.theme.MerchantBorder
 import com.example.merchantapp.ui.theme.MerchantSecondaryText
 
 fun Modifier.noRippleClickable(onClick: () -> Unit): Modifier = composed {
-    clickable(indication = null, interactionSource = remember { MutableInteractionSource() }, onClick = onClick)
+    clickable(
+        indication = null,
+        interactionSource = remember { MutableInteractionSource() },
+        onClick = onClick
+    )
 }
 
 @Composable
@@ -47,7 +52,7 @@ fun LoginScreen(
     val state by viewModel.state.collectAsStateWithLifecycle()
     //val context = LocalContext.current
 
-        LaunchedEffect(viewModel) {
+    LaunchedEffect(viewModel) {
         viewModel.effect.collect { effect ->
             when (effect) {
                 LoginEffect.NavigateToHome -> onNavigateToHome()
@@ -193,9 +198,17 @@ fun LanguageSelector(
         ) {
             Text(text = "🌐", style = MaterialTheme.typography.bodyMedium)
             Spacer(modifier = Modifier.width(5.dp))
-            Text(text = selectedLanguage, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onBackground)
+            Text(
+                text = selectedLanguage,
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onBackground
+            )
             Spacer(modifier = Modifier.width(5.dp))
-            Text(text = "⌄", style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onBackground)
+            Text(
+                text = "⌄",
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.onBackground
+            )
         }
 
         DropdownMenu(
@@ -204,14 +217,26 @@ fun LanguageSelector(
             modifier = Modifier.background(MaterialTheme.colorScheme.surface)
         ) {
             DropdownMenuItem(
-                text = { Text(text = "English", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurface) },
+                text = {
+                    Text(
+                        text = "English",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                },
                 onClick = {
                     onLanguageSelected("English")
                     expanded = false
                 }
             )
             DropdownMenuItem(
-                text = { Text(text = "العربية", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurface) },
+                text = {
+                    Text(
+                        text = "العربية",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                },
                 onClick = {
                     onLanguageSelected("العربية")
                     expanded = false
@@ -228,9 +253,17 @@ fun LanguageSelector(
 @Composable
 fun LoginHeader() {
     Column {
-        Text(text = "Welcome back to Your Merchant App!", style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.onBackground)
+        Text(
+            text = "Welcome back to Your Merchant App!",
+            style = MaterialTheme.typography.titleMedium,
+            color = MaterialTheme.colorScheme.onBackground
+        )
         Spacer(modifier = Modifier.height(10.dp))
-        Text(text = "Log in using your merchant ID", style = MaterialTheme.typography.bodyMedium, color = MerchantSecondaryText)
+        Text(
+            text = "Log in using your merchant ID",
+            style = MaterialTheme.typography.bodyMedium,
+            color = MerchantSecondaryText
+        )
     }
 }
 
@@ -244,7 +277,11 @@ fun MerchantIdField(
     onValueChange: (String) -> Unit
 ) {
     Column(modifier = Modifier.fillMaxWidth()) {
-        Text(text = "Merchant ID", style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onBackground)
+        Text(
+            text = "Merchant ID",
+            style = MaterialTheme.typography.bodyLarge,
+            color = MaterialTheme.colorScheme.onBackground
+        )
         Spacer(modifier = Modifier.height(8.dp))
         OutlinedTextField(
             value = value,
@@ -256,7 +293,12 @@ fun MerchantIdField(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(52.dp),
-            placeholder = { Text(text = "Enter your Merchant ID", style = MaterialTheme.typography.bodyLarge) },
+            placeholder = {
+                Text(
+                    text = "Enter your Merchant ID",
+                    style = MaterialTheme.typography.bodyLarge
+                )
+            },
 
             singleLine = true,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
@@ -282,7 +324,11 @@ fun PinInput(
     val focusRequester = remember { FocusRequester() }
 
     Column(modifier = Modifier.fillMaxWidth()) {
-        Text(text = "PIN", style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onBackground)
+        Text(
+            text = "PIN",
+            style = MaterialTheme.typography.bodyLarge,
+            color = MaterialTheme.colorScheme.onBackground
+        )
         Spacer(modifier = Modifier.height(8.dp))
 
         Box(
@@ -338,7 +384,8 @@ private fun PinBox(
     onClick: () -> Unit
 ) {
     val isFilled = value.isNotEmpty()
-    val borderColor = if (isPinFocused && (isFilled || isActive)) MaterialTheme.colorScheme.primary else MerchantBorder
+    val borderColor =
+        if (isPinFocused && (isFilled || isActive)) MaterialTheme.colorScheme.primary else MerchantBorder
     val borderWidth = if (isPinFocused && (isFilled || isActive)) 2.dp else 1.dp
 
     Box(
@@ -396,7 +443,11 @@ fun RememberMeRow(
                 )
             )
             Spacer(modifier = Modifier.width(2.dp))
-            Text(text = "Remember me", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onBackground)
+            Text(
+                text = "Remember me",
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onBackground
+            )
         }
 
         Text(
@@ -461,7 +512,11 @@ fun OrLoginWithDivider() {
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         HorizontalDivider(modifier = Modifier.weight(1f))
-        Text(text = "Or log in with", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onBackground)
+        Text(
+            text = "Or log in with",
+            style = MaterialTheme.typography.labelSmall,
+            color = MaterialTheme.colorScheme.onBackground
+        )
         HorizontalDivider(modifier = Modifier.weight(1f))
     }
 }
@@ -497,7 +552,11 @@ fun SignUpFooter(onSignUpClick: () -> Unit) {
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.Center
     ) {
-        Text(text = "Don't have an account? ", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onBackground)
+        Text(
+            text = "Don't have an account? ",
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onBackground
+        )
         Text(
             text = "Sign up now",
             style = MaterialTheme.typography.bodySmall.copy(fontWeight = androidx.compose.ui.text.font.FontWeight.Bold),
@@ -533,8 +592,17 @@ fun LoginErrorDialog(
                     contentDescription = "Warning",
                     modifier = Modifier.size(64.dp)
                 )
-                Text(text = "Unable to login", style = MaterialTheme.typography.titleLarge, color = MaterialTheme.colorScheme.onBackground)
-                Text(text = message, style = MaterialTheme.typography.bodyMedium, textAlign = TextAlign.Center, color = MerchantSecondaryText)
+                Text(
+                    text = "Unable to login",
+                    style = MaterialTheme.typography.titleLarge,
+                    color = MaterialTheme.colorScheme.onBackground
+                )
+                Text(
+                    text = message,
+                    style = MaterialTheme.typography.bodyMedium,
+                    textAlign = TextAlign.Center,
+                    color = MerchantSecondaryText
+                )
             }
         },
         confirmButton = {

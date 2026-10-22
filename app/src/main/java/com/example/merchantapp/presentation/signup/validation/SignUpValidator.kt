@@ -16,11 +16,13 @@ object SignUpValidator {
         val words = nameTrimmed.split("\\s+".toRegex())
         val isNameValid = words.size >= 4 && nameTrimmed.all { it.isLetter() || it.isWhitespace() }
 
-        val isPhoneValid = when (countryCode) {
-            "+20" -> phoneNumber.length == 10 && phoneNumber.all { it.isDigit() }
-            else -> phoneNumber.length in 7..15 && phoneNumber.all { it.isDigit() }
-        }
-
+//        val isPhoneValid = when (countryCode) {
+//            "+20" -> phoneNumber.length == 10 && phoneNumber.all { it.isDigit() }
+//            else -> phoneNumber.length in 7..15 && phoneNumber.all { it.isDigit() }
+//        }
+        val isPhoneValid =
+            phoneNumber.length == 6 &&
+                    phoneNumber.all { it.isDigit() }
         val isIdValid = nationalId.length == 14 && nationalId.all { it.isDigit() }
 
         return isNameValid && isPhoneValid && isIdValid && termsAccepted

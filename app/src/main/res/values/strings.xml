@@ -1,3 +1,115 @@
 <resources>
     <string name="app_name">Merchant App</string>
+    <string name="language_english">English</string>
+    <string name="language_arabic">العربية</string>
+    <string name="login_welcome">Welcome back to Your Merchant App!</string>
+    <string name="login_subtitle">Log in using your merchant ID</string>
+    <string name="merchant_id">Merchant ID</string>
+    <string name="merchant_id_hint">Enter your Merchant ID</string>
+    <string name="pin">PIN</string>
+    <string name="remember_me">Remember me</string>
+    <string name="forgot_pin">Forgot your PIN?</string>
+    <string name="continue_button">Continue</string>
+    <string name="face_verification">Face verification</string>
+    <string name="or_login_with">Or log in with</string>
+    <string name="mobile_number">Mobile Number</string>
+    <string name="no_account">Don\'t have an account?</string>
+    <string name="sign_up_now">Sign up now</string>
+    <string name="login_warning">Warning</string>
+    <string name="login_unable">Unable to login</string>
+    <string name="try_again">Try Again</string>
+    <string name="personal_title">Enter your personal details</string>
+    <string name="personal_subtitle">Complete your personal details to continue</string>
+    <string name="back">Back</string>
+    <string name="step_progress">Step %1$d of %2$d</string>
+    <string name="full_name">Full Name</string>
+    <string name="full_name_hint">e.g. Ahmed Mohamed Ali Hassan</string>
+    <string name="full_name_validation">Please enter the first four names of your full name.</string>
+    <string name="info">Info</string>
+    <string name="phone_number">Phone number</string>
+    <string name="phone_number_hint">Enter your number</string>
+    <string name="national_id">National ID</string>
+    <string name="national_id_hint">Enter your national ID</string>
+    <string name="terms_agreement_prefix">I agree to Paysky\'s </string>
+    <string name="terms_conditions">Terms &amp; Conditions</string>
+    <string name="next">Next</string>
+    <string name="business_title">Now, tell us more about your business</string>
+    <string name="business_subtitle">Complete your business details to continue.</string>
+    <string name="save_draft">Save as draft</string>
+    <string name="business_name">Business name</string>
+    <string name="business_name_hint">e.g. Saudi Market</string>
+    <string name="business_category">Business category</string>
+    <string name="choose_business_category">Choose your business category</string>
+    <string name="dropdown">Dropdown</string>
+    <string name="business_address">Business address</string>
+    <string name="business_address_hint">Enter or pick location from map</string>
+    <string name="pick_location">Pick Location</string>
+    <string name="joining_contract">Joining contract</string>
+    <string name="contract_downloaded">Contract Downloaded ✓</string>
+    <string name="download_contract">Download contract</string>
+    <string name="business_website">Business website</string>
+    <string name="optional">(Optional)</string>
+    <string name="business_website_hint">Enter or paste your website URL here</string>
+    <string name="confirm_location">Confirm Location</string>
+    <string name="fallback_address">Lat: %1$s, Lng: %2$s</string>
+    <string name="category_retail_grocery">Retail &amp; Grocery</string>
+    <string name="category_restaurant_cafe">Restaurant &amp; Cafe</string>
+    <string name="category_e_commerce">E-Commerce</string>
+    <string name="category_services">Services</string>
+    <string name="category_fashion_beauty">Fashion &amp; Beauty</string>
+    <string name="category_electronics">Electronics</string>
+    <string name="settlement_title">Add Settlement Account</string>
+    <string name="settlement_subtitle">Choose how you\'d like to receive your payments.</string>
+    <string name="bank_account">Bank Account</string>
+    <string name="card">Card</string>
+    <string name="wallet">Wallet</string>
+    <string name="select_your_bank">Select your bank</string>
+    <string name="choose_your_bank">Choose your bank</string>
+    <string name="iban_number">IBAN number</string>
+    <string name="iban_hint">Enter or paste IBAN number here</string>
+    <string name="bank_statement">Bank Statement</string>
+    <string name="bank_statement_uploaded">Bank Statement Uploaded ✓</string>
+    <string name="upload_documents">Upload documents</string>
+    <string name="card_number">Card Number</string>
+    <string name="card_number_hint">Enter 16-digit card number</string>
+    <string name="wallet_phone_number">Wallet Phone Number</string>
+    <string name="wallet_number_hint">Enter mobile wallet number</string>
+    <string name="submit">Submit</string>
+    <string name="bank_al_rajhi">Al Rajhi Bank</string>
+    <string name="bank_snb">Saudi National Bank (SNB)</string>
+    <string name="bank_riyad">Riyad Bank</string>
+    <string name="bank_alinma">Alinma Bank</string>
+    <string name="bank_arab_national">Arab National Bank</string>
+    <string name="bank_albilad">Bank Albilad</string>
+    <string name="welcome_back">Welcome back!</string>
+    <string name="merchant_dashboard">Merchant Dashboard</string>
+
+
+
+
+
+    <string name="merchant_dashboard_subtitle">Your merchant account information</string>
+    <string name="merchant_profile_load_error">Unable to load merchant profile.</string>
+    <string name="merchant_welcome">Welcome, %1$s</string>
+
+    <string name="personal_information">Personal Information</string>
+    <string name="business_information">Business Information</string>
+    <string name="settlement_information">Settlement Information</string>
+
+    <string name="user_id">User ID</string>
+    <string name="country_code">Country code</string>
+
+
+    <string name="settlement_type">Settlement type</string>
+    <string name="selected_bank">Selected bank</string>
+    <string name="iban">IBAN</string>
+    <string name="wallet_number">Wallet number</string>
+
+
+
+
+    <string name="login_error_invalid_credentials">Incorrect Merchant ID or PIN. Please check your credentials and try again.</string>
+    <string name="login_error_unable_to_login">Unable to login. Please try again.</string>
+
+
 </resources>

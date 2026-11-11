@@ -1,5 +1,6 @@
 package com.example.merchantapp.presentation.login.validation
 
+import com.example.merchantapp.core.constants.Constants
 import javax.inject.Inject
 
 class LoginValidator @Inject constructor() {
@@ -8,14 +9,14 @@ class LoginValidator @Inject constructor() {
         merchantId: String,
         pin: String
     ): Boolean {
-        return merchantId.length == 14 &&
+        return merchantId.length == Constants.NATIONAL_ID_LENGTH &&
                 merchantId.all { it.isDigit() } &&
-                pin.length == 6 &&
+                pin.length == Constants.PIN_LENGTH &&
                 pin.all { it.isDigit() }
     }
 
     fun isValidPinInput(value: String): Boolean {
-        return value.length <= 6 &&
+        return value.length <= Constants.PIN_LENGTH &&
                 value.all { it.isDigit() }
     }
 }

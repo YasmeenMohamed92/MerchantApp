@@ -29,7 +29,7 @@ import com.example.merchantapp.presentation.signup.steps.SettlementAccountScreen
 @Composable
 fun SignUpRoute(
     onNavigateBack: () -> Unit,
-    onCompleteSignUp: () -> Unit,
+    onCompleteSignUp: (String) -> Unit,
     viewModel: SignUpViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -137,8 +137,8 @@ fun SignUpRoute(
                 is SignUpEffect.NavigateToStep -> {
                 }
 
-                SignUpEffect.SignUpCompleted -> {
-                    onCompleteSignUp()
+                is SignUpEffect.SignUpCompleted -> {
+                    onCompleteSignUp(effect.merchantId)
                 }
 
                 is SignUpEffect.ShowToast -> {

@@ -1,3 +1,4 @@
+
 package com.example.merchantapp.di
 
 import android.content.Context
@@ -24,10 +25,18 @@ object RoomModule {
             context,
             MerchantDatabase::class.java,
             "merchant_local_database"
-        ).build()
+        )
+            .addMigrations(
+                MerchantDatabase.MIGRATION_1_2,
+                MerchantDatabase.MIGRATION_2_3,
+                MerchantDatabase.MIGRATION_3_4,
+                MerchantDatabase.MIGRATION_4_5
+            )
+            .build()
     }
 
     @Provides
+    @Singleton
     fun provideMerchantUserDao(
         database: MerchantDatabase
     ): MerchantUserDao {

@@ -1,5 +1,7 @@
 package com.example.merchantapp.presentation.login
 
+import com.example.merchantapp.domain.model.LoginError
+
 data class LoginUiState(
     val merchantId: String = "",
     val pin: String = "",
@@ -14,5 +16,5 @@ sealed interface LoginStatus {
     data object Idle : LoginStatus
     data object Loading : LoginStatus
     data object Success : LoginStatus
-    data class Error(val message: String) : LoginStatus
+    data class Error(val error: LoginError) : LoginStatus
 }

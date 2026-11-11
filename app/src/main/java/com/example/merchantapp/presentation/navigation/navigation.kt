@@ -1,16 +1,21 @@
 package com.example.merchantapp.presentation.navigation
 
-import kotlinx.serialization.Serializable
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.toRoute
+import com.example.merchantapp.data.local.EncryptedSessionManager
 import com.example.merchantapp.presentation.home.HomeScreen
 import com.example.merchantapp.presentation.login.LoginScreen
 import com.example.merchantapp.presentation.signup.SignUpRoute
+import kotlinx.serialization.Serializable
 
 sealed interface Screen {
+
     @Serializable
     data object Login : Screen
 
@@ -18,132 +23,97 @@ sealed interface Screen {
     data object SignUp : Screen
 
     @Serializable
-    data object Home : Screen
+    data class Home(
+        val merchantId: String
+    ) : Screen
 }
 
 @Composable
 fun AppNavGraph(
     navController: NavHostController = rememberNavController()
 ) {
+    val context = LocalContext.current
+
+    // Read the encrypted session once when the navigation graph is created.
+    val sessionManager = remember(context) {
+        EncryptedSessionManager(
+            context.applicationContext
+        )
+    }
+
+    val savedMerchantId = remember(sessionManager) {
+        sessionManager.getSavedMerchantId()
+    }
+
+    val startDestination: Screen =
+        if (!savedMerchantId.isNullOrBlank()) {
+            Screen.Home(
+                merchantId = savedMerchantId
+            )
+        } else {
+            Screen.Login
+        }
+
     NavHost(
         navController = navController,
-        startDestination = Screen.Login
+        startDestination = startDestination
     ) {
 
         composable<Screen.Login> {
+
             LoginScreen(
-                onNavigateToHome = {
-                    navController.navigate(Screen.Home) {
-                        popUpTo<Screen.Login> { inclusive = true }
+                onNavigateToHome = { merchantId ->
+
+                    navController.navigate(
+                        Screen.Home(
+                            merchantId = merchantId
+                        )
+                    ) {
+                        popUpTo<Screen.Login> {
+                            inclusive = true
+                        }
                     }
                 },
+
                 onNavigateToSignUp = {
-                    navController.navigate(Screen.SignUp)
+                    navController.navigate(
+                        Screen.SignUp
+                    )
                 }
             )
         }
 
         composable<Screen.SignUp> {
+
             SignUpRoute(
                 onNavigateBack = {
                     navController.popBackStack()
                 },
-                onCompleteSignUp = {
-                    navController.navigate(Screen.Home) {
-                        popUpTo<Screen.Login> { inclusive = true }
+
+                onCompleteSignUp = { merchantId ->
+
+                    navController.navigate(
+                        Screen.Home(
+                            merchantId = merchantId
+                        )
+                    ) {
+                        popUpTo<Screen.Login> {
+                            inclusive = true
+                        }
                     }
                 }
             )
         }
 
-        composable<Screen.Home> {
-            HomeScreen()
+        composable<Screen.Home> { backStackEntry ->
+
+            val route =
+                backStackEntry.toRoute<Screen.Home>()
+
+            HomeScreen(
+                merchantId = route.merchantId
+            )
         }
     }
 }
-//package com.example.merchantapp.presentation.navigation
-//
-//import kotlinx.serialization.Serializable
-//import androidx.compose.runtime.Composable
-//import androidx.navigation.NavHostController
-//import androidx.navigation.compose.NavHost
-//import androidx.navigation.compose.composable
-//import androidx.navigation.compose.rememberNavController
-//import com.example.merchantapp.presentation.home.HomeScreen
-//import com.example.merchantapp.presentation.login.LoginScreen
-//import com.example.merchantapp.presentation.signup.steps.BusinessDetailsScreen
-//import com.example.merchantapp.presentation.signup.steps.PersonalInfoScreen
-//import com.example.merchantapp.presentation.signup.steps.SettlementAccountScreen
-//
-//sealed interface Screen {
-//    @Serializable
-//    data object Login : Screen
-//
-//    @Serializable
-//    data object SignUpPersonalInfo : Screen
-//
-//    @Serializable
-//    data object SignUpBusinessDetails : Screen
-//
-//    @Serializable
-//    data object SignUpSettlement : Screen
-//
-//    @Serializable
-//    data object Home : Screen
-//}
-//
-//@Composable
-//fun AppNavGraph(
-//    navController: NavHostController = rememberNavController()
-//) {
-//    NavHost(
-//        navController = navController,
-//        startDestination = Screen.Login
-//    ) {
-//
-//        composable<Screen.Login> {
-//            LoginScreen(
-//                onNavigateToHome = {
-//                    navController.navigate(Screen.Home) {
-//                        popUpTo<Screen.Login> { inclusive = true }
-//                    }
-//                },
-//                onNavigateToSignUp = {
-//                    navController.navigate(Screen.SignUpPersonalInfo)
-//                }
-//            )
-//        }
-//
-//        // الخطوة الثانية: المعلومات الشخصية مربوطة بالـ ViewModel مباشرة
-//        composable<Screen.SignUpPersonalInfo> {
-//            PersonalInfoScreen(
-//                onNavigateBack = { navController.popBackStack() },
-//                onNavigateNext = { navController.navigate(Screen.SignUpBusinessDetails) }
-//            )
-//        }
-//
-//        // الخطوة الرابعة: بيانات النشاط التجاري مربوطة بالـ ViewModel مباشرة
-//        composable<Screen.SignUpBusinessDetails> {
-//            BusinessDetailsScreen(
-//                onNavigateBack = { navController.popBackStack() },
-//                onNavigateNext = { navController.navigate(Screen.SignUpSettlement) }
-//            )
-//        }
-//
-//        // الخطوة الثامنة: حساب التسوية مربوطة بالـ ViewModel مباشرة
-//        composable<Screen.SignUpSettlement> {
-//            SettlementAccountScreen(
-//                onNavigateBack = { navController.popBackStack() },
-//                onCompleteSignUp = {
-//                    navController.navigate(Screen.Home) {
-//                        popUpTo<Screen.Login> { inclusive = true }
-//                    }
-//                }
-//            )
-//        }
-//
-//        composable<Screen.Home> {
-//            HomeScreen()
-//        }
-//    }
-//}
+

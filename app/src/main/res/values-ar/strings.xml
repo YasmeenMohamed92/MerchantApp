@@ -1,3 +1,108 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="app_name">تطبيق التاجر</string>
+    <string name="language_english">English</string>
+    <string name="language_arabic">العربية</string>
+    <string name="login_welcome">مرحبًا بعودتك إلى تطبيق التاجر!</string>
+    <string name="login_subtitle">سجّل الدخول باستخدام رقم التاجر</string>
+    <string name="merchant_id">رقم التاجر</string>
+    <string name="merchant_id_hint">أدخل رقم التاجر</string>
+    <string name="pin">الرقم السري (PIN)</string>
+    <string name="remember_me">تذكرني</string>
+    <string name="forgot_pin">هل نسيت الرقم السري؟</string>
+    <string name="continue_button">متابعة</string>
+    <string name="face_verification">التحقق من الوجه</string>
+    <string name="or_login_with">أو سجّل الدخول باستخدام</string>
+    <string name="mobile_number">رقم الهاتف المحمول</string>
+    <string name="no_account">ليس لديك حساب؟</string>
+    <string name="sign_up_now">سجّل الآن</string>
+    <string name="login_warning">تنبيه</string>
+    <string name="login_unable">تعذّر تسجيل الدخول</string>
+    <string name="try_again">حاول مرة أخرى</string>
+    <string name="personal_title">أدخلي بياناتك الشخصية</string>
+    <string name="personal_subtitle">أكملي بياناتك الشخصية للمتابعة</string>
+    <string name="back">رجوع</string>
+    <string name="step_progress">الخطوة %1$d من %2$d</string>
+    <string name="full_name">الاسم بالكامل</string>
+    <string name="full_name_hint">مثال: أحمد محمد علي حسن</string>
+    <string name="full_name_validation">يرجى إدخال أربعة أسماء على الأقل من اسمك بالكامل.</string>
+    <string name="info">معلومات</string>
+    <string name="phone_number">رقم الهاتف</string>
+    <string name="phone_number_hint">أدخلي رقم الهاتف</string>
+    <string name="national_id">الرقم القومي</string>
+    <string name="national_id_hint">أدخلي الرقم القومي</string>
+    <string name="terms_agreement_prefix">أوافق على </string>
+    <string name="terms_conditions">الشروط والأحكام</string>
+    <string name="next">التالي</string>
+    <string name="business_title">أخبرينا المزيد عن نشاطك التجاري</string>
+    <string name="business_subtitle">أكملي بيانات نشاطك التجاري للمتابعة.</string>
+    <string name="save_draft">حفظ كمسودة</string>
+    <string name="business_name">اسم النشاط التجاري</string>
+    <string name="business_name_hint">مثال: السوق السعودي</string>
+    <string name="business_category">فئة النشاط التجاري</string>
+    <string name="choose_business_category">اختاري فئة النشاط التجاري</string>
+    <string name="dropdown">قائمة منسدلة</string>
+    <string name="business_address">عنوان النشاط التجاري</string>
+    <string name="business_address_hint">أدخلي العنوان أو اختاري الموقع من الخريطة</string>
+    <string name="pick_location">اختيار الموقع</string>
+    <string name="joining_contract">عقد الانضمام</string>
+    <string name="contract_downloaded">تم تنزيل العقد ✓</string>
+    <string name="download_contract">تنزيل العقد</string>
+    <string name="business_website">الموقع الإلكتروني للنشاط التجاري</string>
+    <string name="optional">(اختياري)</string>
+    <string name="business_website_hint">أدخلي رابط الموقع الإلكتروني أو الصقيه هنا</string>
+    <string name="confirm_location">تأكيد الموقع</string>
+    <string name="fallback_address">خط العرض: %1$s، خط الطول: %2$s</string>
+    <string name="category_retail_grocery">متاجر التجزئة والبقالة</string>
+    <string name="category_restaurant_cafe">مطاعم ومقاهٍ</string>
+    <string name="category_e_commerce">التجارة الإلكترونية</string>
+    <string name="category_services">الخدمات</string>
+    <string name="category_fashion_beauty">الأزياء والجمال</string>
+    <string name="category_electronics">الإلكترونيات</string>
+    <string name="settlement_title">إضافة حساب لاستلام المدفوعات</string>
+    <string name="settlement_subtitle">اختاري الطريقة التي تفضلين استلام مدفوعاتك بها.</string>
+    <string name="bank_account">حساب بنكي</string>
+    <string name="card">بطاقة</string>
+    <string name="wallet">محفظة إلكترونية</string>
+    <string name="select_your_bank">اختاري البنك</string>
+    <string name="choose_your_bank">اختاري البنك</string>
+    <string name="iban_number">رقم الآيبان (IBAN)</string>
+    <string name="iban_hint">أدخلي رقم الآيبان أو الصقيه هنا</string>
+    <string name="bank_statement">كشف حساب بنكي</string>
+    <string name="bank_statement_uploaded">تم رفع كشف الحساب ✓</string>
+    <string name="upload_documents">رفع المستندات</string>
+    <string name="card_number">رقم البطاقة</string>
+    <string name="card_number_hint">أدخلي رقم البطاقة المكوّن من 16 رقمًا</string>
+    <string name="wallet_phone_number">رقم هاتف المحفظة</string>
+    <string name="wallet_number_hint">أدخلي رقم هاتف المحفظة الإلكترونية</string>
+    <string name="submit">إرسال</string>
+    <string name="bank_al_rajhi">مصرف الراجحي</string>
+    <string name="bank_snb">البنك الأهلي السعودي (SNB)</string>
+    <string name="bank_riyad">بنك الرياض</string>
+    <string name="bank_alinma">مصرف الإنماء</string>
+    <string name="bank_arab_national">البنك العربي الوطني</string>
+    <string name="bank_albilad">بنك البلاد</string>
+    <string name="welcome_back">أهلاً بعودتك!</string>
+    <string name="merchant_dashboard">لوحة تحكم التاجر</string>
+    <string name="login_error_invalid_credentials">رقم التاجر أو الرقم السري غير صحيح. برجاء التأكد من البيانات والمحاولة مرة أخرى.</string>
+    <string name="login_error_unable_to_login">تعذر تسجيل الدخول. برجاء المحاولة مرة أخرى.</string>
+
+
+
+        <string name="merchant_dashboard_subtitle">معلومات حساب التاجر الخاص بك</string>
+        <string name="merchant_profile_load_error">تعذر تحميل بيانات التاجر.</string>
+        <string name="merchant_welcome">مرحبًا، %1$s</string>
+
+        <string name="personal_information">المعلومات الشخصية</string>
+        <string name="business_information">معلومات النشاط التجاري</string>
+        <string name="settlement_information">معلومات التسوية</string>
+
+        <string name="user_id">رقم المستخدم</string>
+
+        <string name="country_code">كود الدولة</string>
+        <string name="settlement_type">نوع التسوية</string>
+        <string name="selected_bank">البنك المختار</string>
+        <string name="iban">رقم IBAN</string>
+        <string name="wallet_number">رقم المحفظة</string>
+
+
 </resources>

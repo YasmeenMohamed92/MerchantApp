@@ -1,5 +1,7 @@
+
 package com.example.merchantapp.presentation.login
 
+import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -24,6 +26,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
@@ -32,45 +35,57 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.merchantapp.R
+import com.example.merchantapp.core.localization.LanguageManager
+import com.example.merchantapp.domain.model.LoginError
 import com.example.merchantapp.ui.theme.MerchantBorder
 import com.example.merchantapp.ui.theme.MerchantSecondaryText
 
-fun Modifier.noRippleClickable(onClick: () -> Unit): Modifier = composed {
+fun Modifier.noRippleClickable(
+    onClick: () -> Unit
+): Modifier = composed {
     clickable(
         indication = null,
-        interactionSource = remember { MutableInteractionSource() },
+        interactionSource = remember {
+            MutableInteractionSource()
+        },
         onClick = onClick
     )
 }
 
 @Composable
 fun LoginScreen(
-    onNavigateToHome: () -> Unit,
+    onNavigateToHome: (String) -> Unit,
     onNavigateToSignUp: () -> Unit,
     viewModel: LoginViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
-    //val context = LocalContext.current
 
     LaunchedEffect(viewModel) {
         viewModel.effect.collect { effect ->
             when (effect) {
-                LoginEffect.NavigateToHome -> onNavigateToHome()
-                LoginEffect.NavigateToSignUp -> onNavigateToSignUp()
+                is LoginEffect.NavigateToHome -> {
+                    onNavigateToHome(effect.merchantId)
+                }
+
+                LoginEffect.NavigateToSignUp -> {
+                    onNavigateToSignUp()
+                }
             }
         }
     }
 
     val configuration = LocalConfiguration.current
-    val isLandscape = configuration.screenWidthDp > configuration.screenHeightDp
-
+    val isLandscape =
+        configuration.screenWidthDp > configuration.screenHeightDp
 
     val isLoading = state.status is LoginStatus.Loading
-    val errorStatus = state.status as? LoginStatus.Error // safe cast
+    val errorStatus = state.status as? LoginStatus.Error
 
     if (errorStatus != null) {
         LoginErrorDialog(
-            message = errorStatus.message,
+            message = stringResource(
+                id = errorStatus.error.toStringRes()
+            ),
             onTryAgain = {
                 viewModel.onIntent(LoginIntent.ErrorDismissed)
             }
@@ -82,7 +97,10 @@ fun LoginScreen(
             .fillMaxSize()
             .statusBarsPadding()
             .background(MaterialTheme.colorScheme.background)
-            .padding(horizontal = 16.dp, vertical = 24.dp)
+            .padding(
+                horizontal = 16.dp,
+                vertical = 24.dp
+            )
     ) {
         Column(
             modifier = Modifier
@@ -90,28 +108,39 @@ fun LoginScreen(
                 .verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.SpaceBetween
         ) {
-
             Column(
                 modifier = Modifier.fillMaxWidth(),
                 verticalArrangement = Arrangement.Top
             ) {
                 LanguageSelector(
                     selectedLanguage = state.selectedLanguage,
-                    onLanguageSelected = {
-                        viewModel.onIntent(LoginIntent.LanguageChanged(it))
+                    onLanguageSelected = { language ->
+                        viewModel.onIntent(
+                            LoginIntent.LanguageChanged(language)
+                        )
                     }
                 )
 
-                Spacer(modifier = Modifier.height(if (isLandscape) 16.dp else 24.dp))
+                Spacer(
+                    modifier = Modifier.height(
+                        if (isLandscape) 16.dp else 24.dp
+                    )
+                )
 
                 LoginHeader()
 
-                Spacer(modifier = Modifier.height(if (isLandscape) 14.dp else 20.dp))
+                Spacer(
+                    modifier = Modifier.height(
+                        if (isLandscape) 14.dp else 20.dp
+                    )
+                )
 
                 MerchantIdField(
                     value = state.merchantId,
-                    onValueChange = {
-                        viewModel.onIntent(LoginIntent.MerchantIdChanged(it))
+                    onValueChange = { value ->
+                        viewModel.onIntent(
+                            LoginIntent.MerchantIdChanged(value)
+                        )
                     }
                 )
 
@@ -119,8 +148,10 @@ fun LoginScreen(
 
                 PinInput(
                     pin = state.pin,
-                    onPinChange = {
-                        viewModel.onIntent(LoginIntent.PinChanged(it))
+                    onPinChange = { value ->
+                        viewModel.onIntent(
+                            LoginIntent.PinChanged(value)
+                        )
                     }
                 )
 
@@ -128,41 +159,49 @@ fun LoginScreen(
 
                 RememberMeRow(
                     checked = state.rememberMe,
-                    onCheckedChange = {
-                        viewModel.onIntent(LoginIntent.RememberMeChanged(it))
+                    onCheckedChange = { checked ->
+                        viewModel.onIntent(
+                            LoginIntent.RememberMeChanged(checked)
+                        )
                     },
                     onForgotPinClick = {
-                        viewModel.onIntent(LoginIntent.ForgotPinClicked)
+                        viewModel.onIntent(
+                            LoginIntent.ForgotPinClicked
+                        )
                     }
                 )
+
                 Spacer(modifier = Modifier.height(50.dp))
 
                 ContinueAndFaceVerificationRow(
                     enabled = state.isContinueEnabled,
                     loading = isLoading,
                     onContinueClick = {
-                        viewModel.onIntent(LoginIntent.ContinueClicked)
+                        viewModel.onIntent(
+                            LoginIntent.ContinueClicked
+                        )
                     },
                     onFaceVerificationClick = {
-                        viewModel.onIntent(LoginIntent.FaceVerificationClicked)
+                        viewModel.onIntent(
+                            LoginIntent.FaceVerificationClicked
+                        )
                     }
                 )
             }
-
 
             Column(
                 modifier = Modifier.fillMaxWidth(),
                 verticalArrangement = Arrangement.Bottom
             ) {
-
-
                 OrLoginWithDivider()
 
                 Spacer(modifier = Modifier.height(20.dp))
 
                 MobileNumberButton(
                     onClick = {
-                        viewModel.onIntent(LoginIntent.MobileNumberClicked)
+                        viewModel.onIntent(
+                            LoginIntent.MobileNumberClicked
+                        )
                     }
                 )
 
@@ -170,11 +209,28 @@ fun LoginScreen(
 
                 SignUpFooter(
                     onSignUpClick = {
-                        viewModel.onIntent(LoginIntent.SignUpClicked)
+                        viewModel.onIntent(
+                            LoginIntent.SignUpClicked
+                        )
                     }
                 )
             }
         }
+    }
+}
+
+/* ---------------------------------------------------------
+   LOGIN ERROR LOCALIZATION
+   --------------------------------------------------------- */
+
+@StringRes
+private fun LoginError.toStringRes(): Int {
+    return when (this) {
+        LoginError.INVALID_CREDENTIALS ->
+            R.string.login_error_invalid_credentials
+
+        LoginError.UNABLE_TO_LOGIN ->
+            R.string.login_error_unable_to_login
     }
 }
 
@@ -187,23 +243,36 @@ fun LanguageSelector(
     selectedLanguage: String,
     onLanguageSelected: (String) -> Unit
 ) {
-    var expanded by remember { mutableStateOf(false) }
+    var expanded by remember {
+        mutableStateOf(false)
+    }
 
-    Box(modifier = Modifier.wrapContentSize()) {
+    Box(
+        modifier = Modifier.wrapContentSize()
+    ) {
         Row(
             modifier = Modifier
-                .noRippleClickable { expanded = !expanded }
+                .noRippleClickable {
+                    expanded = !expanded
+                }
                 .padding(vertical = 6.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(text = "🌐", style = MaterialTheme.typography.bodyMedium)
+            Text(
+                text = "🌐",
+                style = MaterialTheme.typography.bodyMedium
+            )
+
             Spacer(modifier = Modifier.width(5.dp))
+
             Text(
                 text = selectedLanguage,
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onBackground
             )
+
             Spacer(modifier = Modifier.width(5.dp))
+
             Text(
                 text = "⌄",
                 style = MaterialTheme.typography.bodyLarge,
@@ -213,32 +282,39 @@ fun LanguageSelector(
 
         DropdownMenu(
             expanded = expanded,
-            onDismissRequest = { expanded = false },
-            modifier = Modifier.background(MaterialTheme.colorScheme.surface)
+            onDismissRequest = {
+                expanded = false
+            },
+            modifier = Modifier.background(
+                MaterialTheme.colorScheme.surface
+            )
         ) {
             DropdownMenuItem(
                 text = {
                     Text(
-                        text = "English",
+                        text = stringResource(R.string.language_english),
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurface
                     )
                 },
                 onClick = {
                     onLanguageSelected("English")
+                    LanguageManager.changeLanguage("en")
                     expanded = false
                 }
             )
+
             DropdownMenuItem(
                 text = {
                     Text(
-                        text = "العربية",
+                        text = stringResource(R.string.language_arabic),
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurface
                     )
                 },
                 onClick = {
                     onLanguageSelected("العربية")
+                    LanguageManager.changeLanguage("ar")
                     expanded = false
                 }
             )
@@ -254,13 +330,15 @@ fun LanguageSelector(
 fun LoginHeader() {
     Column {
         Text(
-            text = "Welcome back to Your Merchant App!",
+            text = stringResource(R.string.login_welcome),
             style = MaterialTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.onBackground
         )
+
         Spacer(modifier = Modifier.height(10.dp))
+
         Text(
-            text = "Log in using your merchant ID",
+            text = stringResource(R.string.login_subtitle),
             style = MaterialTheme.typography.bodyMedium,
             color = MerchantSecondaryText
         )
@@ -276,13 +354,17 @@ fun MerchantIdField(
     value: String,
     onValueChange: (String) -> Unit
 ) {
-    Column(modifier = Modifier.fillMaxWidth()) {
+    Column(
+        modifier = Modifier.fillMaxWidth()
+    ) {
         Text(
-            text = "Merchant ID",
+            text = stringResource(R.string.merchant_id),
             style = MaterialTheme.typography.bodyLarge,
             color = MaterialTheme.colorScheme.onBackground
         )
+
         Spacer(modifier = Modifier.height(8.dp))
+
         OutlinedTextField(
             value = value,
             onValueChange = { newValue ->
@@ -295,13 +377,14 @@ fun MerchantIdField(
                 .height(52.dp),
             placeholder = {
                 Text(
-                    text = "Enter your Merchant ID",
+                    text = stringResource(R.string.merchant_id_hint),
                     style = MaterialTheme.typography.bodyLarge
                 )
             },
-
             singleLine = true,
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Number
+            ),
             textStyle = MaterialTheme.typography.bodyLarge,
             colors = OutlinedTextFieldDefaults.colors(
                 unfocusedBorderColor = MerchantBorder,
@@ -320,15 +403,23 @@ fun PinInput(
     pin: String,
     onPinChange: (String) -> Unit
 ) {
-    var isFocused by remember { mutableStateOf(false) }
-    val focusRequester = remember { FocusRequester() }
+    var isFocused by remember {
+        mutableStateOf(false)
+    }
 
-    Column(modifier = Modifier.fillMaxWidth()) {
+    val focusRequester = remember {
+        FocusRequester()
+    }
+
+    Column(
+        modifier = Modifier.fillMaxWidth()
+    ) {
         Text(
-            text = "PIN",
+            text = stringResource(R.string.pin),
             style = MaterialTheme.typography.bodyLarge,
             color = MaterialTheme.colorScheme.onBackground
         )
+
         Spacer(modifier = Modifier.height(8.dp))
 
         Box(
@@ -347,7 +438,9 @@ fun PinInput(
                         isActive = index == pin.length,
                         isPinFocused = isFocused,
                         modifier = Modifier.weight(1f),
-                        onClick = { focusRequester.requestFocus() }
+                        onClick = {
+                            focusRequester.requestFocus()
+                        }
                     )
                 }
             }
@@ -355,20 +448,34 @@ fun PinInput(
             BasicTextField(
                 value = pin,
                 onValueChange = { value ->
-                    if (value.length <= 6 && value.all { it.isDigit() }) {
+                    if (
+                        value.length <= 6 &&
+                        value.all { it.isDigit() }
+                    ) {
                         onPinChange(value)
                     }
                 },
                 modifier = Modifier
                     .size(1.dp)
                     .focusRequester(focusRequester)
-                    .onFocusChanged { focusState -> isFocused = focusState.isFocused },
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                    .onFocusChanged { focusState ->
+                        isFocused = focusState.isFocused
+                    },
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Number
+                ),
                 singleLine = true,
                 cursorBrush = SolidColor(Color.Transparent),
-                textStyle = TextStyle(color = Color.Transparent, fontSize = 1.sp),
+                textStyle = TextStyle(
+                    color = Color.Transparent,
+                    fontSize = 1.sp
+                ),
                 decorationBox = { innerTextField ->
-                    Box(modifier = Modifier.size(1.dp)) { innerTextField() }
+                    Box(
+                        modifier = Modifier.size(1.dp)
+                    ) {
+                        innerTextField()
+                    }
                 }
             )
         }
@@ -384,22 +491,43 @@ private fun PinBox(
     onClick: () -> Unit
 ) {
     val isFilled = value.isNotEmpty()
+
     val borderColor =
-        if (isPinFocused && (isFilled || isActive)) MaterialTheme.colorScheme.primary else MerchantBorder
-    val borderWidth = if (isPinFocused && (isFilled || isActive)) 2.dp else 1.dp
+        if (isPinFocused && (isFilled || isActive)) {
+            MaterialTheme.colorScheme.primary
+        } else {
+            MerchantBorder
+        }
+
+    val borderWidth =
+        if (isPinFocused && (isFilled || isActive)) {
+            2.dp
+        } else {
+            1.dp
+        }
 
     Box(
         modifier = modifier
             .height(52.dp)
-            .border(width = borderWidth, color = borderColor, shape = RoundedCornerShape(8.dp))
-            .noRippleClickable { onClick() },
+            .border(
+                width = borderWidth,
+                color = borderColor,
+                shape = RoundedCornerShape(8.dp)
+            )
+            .noRippleClickable {
+                onClick()
+            },
         contentAlignment = Alignment.Center
     ) {
         if (isFilled) {
             Text(
                 text = value,
                 style = MaterialTheme.typography.titleLarge,
-                color = if (isPinFocused) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onBackground
+                color = if (isPinFocused) {
+                    MaterialTheme.colorScheme.primary
+                } else {
+                    MaterialTheme.colorScheme.onBackground
+                }
             )
         } else if (isActive && isPinFocused) {
             Box(
@@ -442,19 +570,23 @@ fun RememberMeRow(
                     checkmarkColor = MaterialTheme.colorScheme.onPrimary
                 )
             )
+
             Spacer(modifier = Modifier.width(2.dp))
+
             Text(
-                text = "Remember me",
+                text = stringResource(R.string.remember_me),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onBackground
             )
         }
 
         Text(
-            text = "Forgot your PIN?",
+            text = stringResource(R.string.forgot_pin),
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onBackground,
-            modifier = Modifier.noRippleClickable { onForgotPinClick() }
+            modifier = Modifier.noRippleClickable {
+                onForgotPinClick()
+            }
         )
     }
 }
@@ -484,18 +616,30 @@ fun ContinueAndFaceVerificationRow(
             shape = RoundedCornerShape(8.dp)
         ) {
             if (loading) {
-                CircularProgressIndicator(modifier = Modifier.size(20.dp), strokeWidth = 2.dp)
+                CircularProgressIndicator(
+                    modifier = Modifier.size(20.dp),
+                    strokeWidth = 2.dp
+                )
             } else {
-                Text(text = "Continue", style = MaterialTheme.typography.labelLarge)
+                Text(
+                    text = stringResource(R.string.continue_button),
+                    style = MaterialTheme.typography.labelLarge
+                )
             }
         }
 
         Image(
-            painter = painterResource(id = R.drawable.faceverification),
-            contentDescription = "Face verification",
+            painter = painterResource(
+                id = R.drawable.faceverification
+            ),
+            contentDescription = stringResource(
+                R.string.face_verification
+            ),
             modifier = Modifier
                 .size(48.dp)
-                .noRippleClickable { onFaceVerificationClick() }
+                .noRippleClickable {
+                    onFaceVerificationClick()
+                }
         )
     }
 }
@@ -511,13 +655,19 @@ fun OrLoginWithDivider() {
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        HorizontalDivider(modifier = Modifier.weight(1f))
+        HorizontalDivider(
+            modifier = Modifier.weight(1f)
+        )
+
         Text(
-            text = "Or log in with",
+            text = stringResource(R.string.or_login_with),
             style = MaterialTheme.typography.labelSmall,
             color = MaterialTheme.colorScheme.onBackground
         )
-        HorizontalDivider(modifier = Modifier.weight(1f))
+
+        HorizontalDivider(
+            modifier = Modifier.weight(1f)
+        )
     }
 }
 
@@ -526,7 +676,9 @@ fun OrLoginWithDivider() {
    --------------------------------------------------------- */
 
 @Composable
-fun MobileNumberButton(onClick: () -> Unit) {
+fun MobileNumberButton(
+    onClick: () -> Unit
+) {
     Button(
         onClick = onClick,
         modifier = Modifier
@@ -538,7 +690,10 @@ fun MobileNumberButton(onClick: () -> Unit) {
             contentColor = MaterialTheme.colorScheme.primary
         )
     ) {
-        Text(text = "Mobile Number", style = MaterialTheme.typography.labelLarge)
+        Text(
+            text = stringResource(R.string.mobile_number),
+            style = MaterialTheme.typography.labelLarge
+        )
     }
 }
 
@@ -547,21 +702,28 @@ fun MobileNumberButton(onClick: () -> Unit) {
    --------------------------------------------------------- */
 
 @Composable
-fun SignUpFooter(onSignUpClick: () -> Unit) {
+fun SignUpFooter(
+    onSignUpClick: () -> Unit
+) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.Center
     ) {
         Text(
-            text = "Don't have an account? ",
+            text = stringResource(R.string.no_account),
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onBackground
         )
+
         Text(
-            text = "Sign up now",
-            style = MaterialTheme.typography.bodySmall.copy(fontWeight = androidx.compose.ui.text.font.FontWeight.Bold),
+            text = stringResource(R.string.sign_up_now),
+            style = MaterialTheme.typography.bodySmall.copy(
+                fontWeight = androidx.compose.ui.text.font.FontWeight.Bold
+            ),
             color = MaterialTheme.colorScheme.primary,
-            modifier = Modifier.noRippleClickable { onSignUpClick() }
+            modifier = Modifier.noRippleClickable {
+                onSignUpClick()
+            }
         )
     }
 }
@@ -588,15 +750,21 @@ fun LoginErrorDialog(
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 Image(
-                    painter = painterResource(id = R.drawable.error),
-                    contentDescription = "Warning",
+                    painter = painterResource(
+                        id = R.drawable.error
+                    ),
+                    contentDescription = stringResource(
+                        R.string.login_warning
+                    ),
                     modifier = Modifier.size(64.dp)
                 )
+
                 Text(
-                    text = "Unable to login",
+                    text = stringResource(R.string.login_unable),
                     style = MaterialTheme.typography.titleLarge,
                     color = MaterialTheme.colorScheme.onBackground
                 )
+
                 Text(
                     text = message,
                     style = MaterialTheme.typography.bodyMedium,
@@ -613,7 +781,10 @@ fun LoginErrorDialog(
                     .height(48.dp),
                 shape = RoundedCornerShape(8.dp)
             ) {
-                Text(text = "Try Again", style = MaterialTheme.typography.labelLarge)
+                Text(
+                    text = stringResource(R.string.try_again),
+                    style = MaterialTheme.typography.labelLarge
+                )
             }
         }
     )

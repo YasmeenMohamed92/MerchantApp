@@ -1,4 +1,6 @@
 package com.example.merchantapp.domain.model
 
-class LoginError {
+enum class LoginError {
+    INVALID_CREDENTIALS,
+    UNABLE_TO_LOGIN
 }

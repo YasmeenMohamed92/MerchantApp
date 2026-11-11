@@ -1,5 +1,4 @@
 
-
 package com.example.merchantapp.presentation.signup.steps
 
 import androidx.compose.foundation.background
@@ -23,6 +22,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.Button
@@ -48,6 +48,7 @@ import androidx.compose.ui.composed
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -55,6 +56,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.merchantapp.R
 import com.example.merchantapp.presentation.signup.SignUpIntent
 import com.example.merchantapp.presentation.signup.SignUpUiState
 import com.example.merchantapp.ui.theme.MerchantBorder
@@ -82,15 +84,20 @@ fun PersonalInfoScreen(
     }
 
     val trimmedName = state.fullName.trim()
+
     val words = if (trimmedName.isEmpty()) {
         emptyList()
     } else {
         trimmedName.split("\\s+".toRegex())
     }
+
     val isNameValid = words.size >= 4
 
     val onFullNameChange: (String) -> Unit = { input ->
-        if (input.all { it.isLetter() || it.isWhitespace() }) {
+        if (input.all {
+                it.isLetter() || it.isWhitespace()
+            }
+        ) {
             onIntent(SignUpIntent.UpdateFullName(input))
         }
     }
@@ -140,7 +147,7 @@ fun PersonalInfoScreen(
                     )
             ) {
                 Text(
-                    text = "Enter your personal details",
+                    text = stringResource(R.string.personal_title),
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.onBackground
                 )
@@ -148,7 +155,7 @@ fun PersonalInfoScreen(
                 Spacer(Modifier.height(8.dp))
 
                 Text(
-                    text = "Complete your personal details to continue",
+                    text = stringResource(R.string.personal_subtitle),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MerchantSecondaryText
                 )
@@ -214,13 +221,13 @@ private fun PersonalInfoHeader(
         horizontalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         Icon(
-            imageVector = Icons.Default.ArrowBack,
-            contentDescription = "Back",
+            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+            contentDescription = stringResource(R.string.back),
             modifier = Modifier.noRippleClickable(onBackClick)
         )
 
         Text(
-            text = "Step 2 of 8",
+            text = stringResource(R.string.step_progress, 2, 8),
             style = MaterialTheme.typography.bodyMedium,
             color = MerchantSecondaryText
         )
@@ -248,7 +255,7 @@ private fun FullNameField(
 ) {
     Column {
         Text(
-            text = "Full Name",
+            text = stringResource(R.string.full_name),
             style = MaterialTheme.typography.bodyLarge,
             color = MaterialTheme.colorScheme.onBackground
         )
@@ -262,7 +269,9 @@ private fun FullNameField(
                 .fillMaxWidth()
                 .height(52.dp),
             placeholder = {
-                Text("e.g. Ahmed Mohamed Ali Hassan")
+                Text(
+                    stringResource(R.string.full_name_hint)
+                )
             },
             singleLine = true,
             keyboardOptions = KeyboardOptions(
@@ -284,7 +293,7 @@ private fun FullNameField(
             ) {
                 Icon(
                     imageVector = Icons.Outlined.Info,
-                    contentDescription = "Info",
+                    contentDescription = stringResource(R.string.info),
                     modifier = Modifier.size(14.dp),
                     tint = MerchantSecondaryText
                 )
@@ -292,7 +301,7 @@ private fun FullNameField(
                 Spacer(Modifier.width(4.dp))
 
                 Text(
-                    text = "Please enter the first four names of your full name.",
+                    text = stringResource(R.string.full_name_validation),
                     style = MaterialTheme.typography.bodySmall,
                     color = MerchantSecondaryText
                 )
@@ -312,7 +321,7 @@ private fun PhoneNumberField(
 ) {
     Column {
         Text(
-            text = "Phone number",
+            text = stringResource(R.string.phone_number),
             style = MaterialTheme.typography.bodyLarge,
             color = MaterialTheme.colorScheme.onBackground
         )
@@ -337,7 +346,9 @@ private fun PhoneNumberField(
                     .weight(1f)
                     .height(52.dp),
                 placeholder = {
-                    Text("Enter your number")
+                    Text(
+                        stringResource(R.string.phone_number_hint)
+                    )
                 },
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(
@@ -360,7 +371,7 @@ private fun NationalIdField(
 ) {
     Column {
         Text(
-            text = "National ID",
+            text = stringResource(R.string.national_id),
             style = MaterialTheme.typography.bodyLarge,
             color = MaterialTheme.colorScheme.onBackground
         )
@@ -374,7 +385,9 @@ private fun NationalIdField(
                 .fillMaxWidth()
                 .height(52.dp),
             placeholder = {
-                Text("Enter your national ID")
+                Text(
+                    stringResource(R.string.national_id_hint)
+                )
             },
             singleLine = true,
             keyboardOptions = KeyboardOptions(
@@ -394,6 +407,13 @@ private fun TermsAndConditionsRow(
     checked: Boolean,
     onCheckedChange: (Boolean) -> Unit
 ) {
+    val agreementPrefix = stringResource(
+        R.string.terms_agreement_prefix
+    )
+    val termsConditions = stringResource(
+        R.string.terms_conditions
+    )
+
     Row(
         modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
@@ -420,7 +440,7 @@ private fun TermsAndConditionsRow(
                     fontSize = 13.sp
                 )
             ) {
-                append("I agree to Paysky's ")
+                append(agreementPrefix)
             }
 
             withStyle(
@@ -430,7 +450,7 @@ private fun TermsAndConditionsRow(
                     fontWeight = FontWeight.SemiBold
                 )
             ) {
-                append("Terms & Conditions")
+                append(termsConditions)
             }
         }
 
@@ -464,7 +484,7 @@ private fun NextButton(
             )
         ) {
             Text(
-                text = "Next",
+                text = stringResource(R.string.next),
                 style = MaterialTheme.typography.labelLarge
             )
         }
@@ -557,352 +577,3 @@ private fun CountryCodeSelector(
         }
     }
 }
-
-//package com.example.merchantapp.presentation.signup.steps
-//
-//import android.widget.Toast
-//import androidx.compose.foundation.background
-//import androidx.compose.foundation.border
-//import androidx.compose.foundation.clickable
-//import androidx.compose.foundation.interaction.MutableInteractionSource
-//import androidx.compose.foundation.layout.*
-//import androidx.compose.foundation.rememberScrollState
-//import androidx.compose.foundation.shape.RoundedCornerShape
-//import androidx.compose.foundation.text.KeyboardOptions
-//import androidx.compose.foundation.verticalScroll
-//import androidx.compose.material.icons.Icons
-//import androidx.compose.material.icons.filled.ArrowBack
-//import androidx.compose.material.icons.outlined.Info
-//import androidx.compose.material3.*
-//import androidx.compose.runtime.*
-//import androidx.compose.ui.Alignment
-//import androidx.compose.ui.Modifier
-//import androidx.compose.ui.composed
-//import androidx.compose.ui.draw.clip
-//import androidx.compose.ui.graphics.Color
-//import androidx.compose.ui.graphics.StrokeCap
-//import androidx.compose.ui.platform.LocalContext
-//import androidx.compose.ui.text.SpanStyle
-//import androidx.compose.ui.text.buildAnnotatedString
-//import androidx.compose.ui.text.font.FontWeight
-//import androidx.compose.ui.text.input.KeyboardType
-//import androidx.compose.ui.text.withStyle
-//import androidx.compose.ui.unit.dp
-//import androidx.compose.ui.unit.sp
-//import androidx.hilt.navigation.compose.hiltViewModel
-//import androidx.lifecycle.compose.collectAsStateWithLifecycle
-//import com.example.merchantapp.presentation.signup.SignUpEffect
-//import com.example.merchantapp.presentation.signup.SignUpIntent
-//import com.example.merchantapp.presentation.signup.SignUpViewModel
-//import com.example.merchantapp.ui.theme.MerchantBorder
-//import com.example.merchantapp.ui.theme.MerchantSecondaryText
-//
-//@Composable
-//fun PersonalInfoScreen(
-//    onNavigateBack: () -> Unit,
-//    onNavigateNext: () -> Unit,
-//    viewModel: SignUpViewModel = hiltViewModel()
-//) {
-//    val state by viewModel.state.collectAsStateWithLifecycle()
-//    val context = LocalContext.current
-//
-//    LaunchedEffect(viewModel) {
-//        viewModel.effect.collect { effect ->
-//            when (effect) {
-//                SignUpEffect.NavigateBack -> onNavigateBack()
-//                SignUpEffect.NavigateToNextStep -> onNavigateNext()
-//                is SignUpEffect.ShowToast -> Toast.makeText(context, effect.message, Toast.LENGTH_SHORT).show()
-//                else -> {}
-//            }
-//        }
-//    }
-//
-//    val trimmedName = state.fullName.trim()
-//    val words = if (trimmedName.isEmpty()) emptyList() else trimmedName.split("\\s+".toRegex())
-//    val isNameValid = words.size >= 4
-//
-//    Column(
-//        modifier = Modifier
-//            .fillMaxSize()
-//            .statusBarsPadding()
-//            .background(MaterialTheme.colorScheme.background),
-//        verticalArrangement = Arrangement.SpaceBetween
-//    ) {
-//        Column(
-//            modifier = Modifier
-//                .weight(1f)
-//                .verticalScroll(rememberScrollState())
-//        ) {
-//            Column(modifier = Modifier.padding(horizontal = 16.dp, vertical = 24.dp)) {
-//                Row(
-//                    verticalAlignment = Alignment.CenterVertically,
-//                    horizontalArrangement = Arrangement.spacedBy(12.dp)
-//                ) {
-//                    Icon(
-//                        imageVector = Icons.Default.ArrowBack,
-//                        contentDescription = "Back",
-//                        modifier = Modifier.noRippleClickable {
-//                            viewModel.onIntent(SignUpIntent.PreviousStepClicked)
-//                        }
-//                    )
-//                    Text(
-//                        text = "Step 2 of 8",
-//                        style = MaterialTheme.typography.bodyMedium,
-//                        color = MerchantSecondaryText
-//                    )
-//                }
-//            }
-//
-//            LinearProgressIndicator(
-//                progress = { 2f / 8f },
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//                    .height(4.dp),
-//                color = MaterialTheme.colorScheme.primary,
-//                trackColor = MerchantBorder.copy(alpha = 0.25f),
-//                strokeCap = StrokeCap.Butt
-//            )
-//
-//            Column(
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//                    .padding(horizontal = 16.dp, vertical = 24.dp)
-//            ) {
-//                Text(
-//                    text = "Enter your personal details",
-//                    style = MaterialTheme.typography.titleMedium,
-//                    color = MaterialTheme.colorScheme.onBackground
-//                )
-//
-//                Spacer(modifier = Modifier.height(8.dp))
-//
-//                Text(
-//                    text = "Complete your personal details to continue",
-//                    style = MaterialTheme.typography.bodyMedium,
-//                    color = MerchantSecondaryText
-//                )
-//
-//                Spacer(modifier = Modifier.height(24.dp))
-//
-//                Text(
-//                    text = "Full Name",
-//                    style = MaterialTheme.typography.bodyLarge,
-//                    color = MaterialTheme.colorScheme.onBackground
-//                )
-//
-//                Spacer(modifier = Modifier.height(8.dp))
-//
-//                OutlinedTextField(
-//                    value = state.fullName,
-//                    onValueChange = { input ->
-//                        if (input.all { it.isLetter() || it.isWhitespace() }) {
-//                            viewModel.onIntent(SignUpIntent.UpdateFullName(input))
-//                        }
-//                    },
-//                    modifier = Modifier.fillMaxWidth().height(52.dp),
-//                    placeholder = { Text(text = "e.g. Ahmed Mohamed Ali Hassan") },
-//                    singleLine = true,
-//                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-//                    textStyle = MaterialTheme.typography.bodyLarge,
-//                    colors = OutlinedTextFieldDefaults.colors(
-//                        unfocusedBorderColor = MerchantBorder,
-//                        focusedBorderColor = MaterialTheme.colorScheme.primary
-//                    )
-//                )
-//
-//                Spacer(modifier = Modifier.height(6.dp))
-//
-//                if (!isNameValid) {
-//                    Row(
-//                        verticalAlignment = Alignment.CenterVertically,
-//                        modifier = Modifier.padding(start = 2.dp)
-//                    ) {
-//                        Icon(
-//                            imageVector = Icons.Outlined.Info,
-//                            contentDescription = "Info",
-//                            modifier = Modifier.size(14.dp),
-//                            tint = MerchantSecondaryText
-//                        )
-//                        Spacer(modifier = Modifier.width(4.dp))
-//                        Text(
-//                            text = "Please enter the first four names of your full name.",
-//                            style = MaterialTheme.typography.bodySmall,
-//                            color = MerchantSecondaryText
-//                        )
-//                    }
-//                }
-//
-//                Spacer(modifier = Modifier.height(16.dp))
-//
-//                Text(
-//                    text = "Phone number",
-//                    style = MaterialTheme.typography.bodyLarge,
-//                    color = MaterialTheme.colorScheme.onBackground
-//                )
-//
-//                Spacer(modifier = Modifier.height(8.dp))
-//
-//                Row(
-//                    modifier = Modifier.fillMaxWidth(),
-//                    horizontalArrangement = Arrangement.spacedBy(8.dp)
-//                ) {
-//                    CountryCodeSelector(
-//                        selectedCode = state.countryCode,
-//                        onCodeSelected = { viewModel.onIntent(SignUpIntent.UpdateCountryCode(it)) }
-//                    )
-//
-//                    OutlinedTextField(
-//                        value = state.phoneNumber,
-//                        onValueChange = { viewModel.onIntent(SignUpIntent.UpdatePhoneNumber(it)) },
-//                        modifier = Modifier.weight(1f).height(52.dp),
-//                        placeholder = { Text(text = "Enter your number") },
-//                        singleLine = true,
-//                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
-//                        textStyle = MaterialTheme.typography.bodyLarge,
-//                        colors = OutlinedTextFieldDefaults.colors(
-//                            unfocusedBorderColor = MerchantBorder,
-//                            focusedBorderColor = MaterialTheme.colorScheme.primary
-//                        )
-//                    )
-//                }
-//
-//                Spacer(modifier = Modifier.height(16.dp))
-//
-//                Text(
-//                    text = "National ID",
-//                    style = MaterialTheme.typography.bodyLarge,
-//                    color = MaterialTheme.colorScheme.onBackground
-//                )
-//
-//                Spacer(modifier = Modifier.height(8.dp))
-//
-//                OutlinedTextField(
-//                    value = state.nationalId,
-//                    onValueChange = { viewModel.onIntent(SignUpIntent.UpdateNationalId(it)) },
-//                    modifier = Modifier.fillMaxWidth().height(52.dp),
-//                    placeholder = { Text(text = "Enter your national ID") },
-//                    singleLine = true,
-//                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-//                    textStyle = MaterialTheme.typography.bodyLarge,
-//                    colors = OutlinedTextFieldDefaults.colors(
-//                        unfocusedBorderColor = MerchantBorder,
-//                        focusedBorderColor = MaterialTheme.colorScheme.primary
-//                    )
-//                )
-//
-//                Spacer(modifier = Modifier.height(16.dp))
-//
-//                Row(
-//                    modifier = Modifier.fillMaxWidth(),
-//                    verticalAlignment = Alignment.CenterVertically
-//                ) {
-//                    Checkbox(
-//                        checked = state.isTermsAccepted,
-//                        onCheckedChange = { viewModel.onIntent(SignUpIntent.UpdateTerms(it)) },
-//                        modifier = Modifier.size(30.dp).clip(RoundedCornerShape(8.dp)),
-//                        colors = CheckboxDefaults.colors(
-//                            checkedColor = MaterialTheme.colorScheme.primary,
-//                            uncheckedColor = MerchantBorder,
-//                            checkmarkColor = MaterialTheme.colorScheme.onPrimary
-//                        )
-//                    )
-//
-//                    Spacer(modifier = Modifier.width(8.dp))
-//
-//                    val termsText = buildAnnotatedString {
-//                        withStyle(style = SpanStyle(color = MaterialTheme.colorScheme.onBackground, fontSize = 13.sp)) {
-//                            append("I agree to Paysky's ")
-//                        }
-//                        withStyle(style = SpanStyle(color = MaterialTheme.colorScheme.primary, fontSize = 14.sp, fontWeight = FontWeight.SemiBold)) {
-//                            append("Terms & Conditions")
-//                        }
-//                    }
-//
-//                    Text(text = termsText)
-//                }
-//            }
-//        }
-//
-//        Box(modifier = Modifier.padding(horizontal = 16.dp, vertical = 24.dp)) {
-//            Button(
-//                onClick = {
-//                    viewModel.onIntent(SignUpIntent.NextStepClicked)
-//                    onNavigateNext()
-//                },
-//                enabled = state.isNextEnabled,
-//                modifier = Modifier.fillMaxWidth().height(48.dp),
-//                shape = RoundedCornerShape(8.dp),
-//                colors = ButtonDefaults.buttonColors(
-//                    containerColor = MaterialTheme.colorScheme.primary,
-//                    disabledContainerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.4f),
-//                    disabledContentColor = Color.White.copy(alpha = 0.7f)
-//                )
-//            ) {
-//                Text(text = "Next", style = MaterialTheme.typography.labelLarge)
-//            }
-//        }
-//    }
-//}
-//
-//@Composable
-//private fun CountryCodeSelector(
-//    selectedCode: String,
-//    onCodeSelected: (String) -> Unit
-//) {
-//    var expanded by remember { mutableStateOf(false) }
-//    data class CountryCode(val code: String, val flag: String)
-//    val countryCodes = listOf(
-//        CountryCode("+20", "🇪🇬"),
-//        CountryCode("+966", "🇸🇦"),
-//        CountryCode("+971", "🇦🇪"),
-//        CountryCode("+965", "🇰🇼"),
-//        CountryCode("+974", "🇶🇦"),
-//        CountryCode("+973", "🇧🇭"),
-//        CountryCode("+968", "🇴🇲")
-//    )
-//    val selectedCountry = countryCodes.firstOrNull { it.code == selectedCode } ?: countryCodes.first()
-//
-//    Box {
-//        Row(
-//            modifier = Modifier
-//                .width(90.dp)
-//                .height(52.dp)
-//                .border(width = 1.dp, color = MerchantBorder, shape = RoundedCornerShape(8.dp))
-//                .noRippleClickable { expanded = true }
-//                .padding(horizontal = 8.dp),
-//            verticalAlignment = Alignment.CenterVertically,
-//            horizontalArrangement = Arrangement.Center
-//        ) {
-//            Text(text = selectedCountry.flag, style = MaterialTheme.typography.bodyMedium)
-//            Spacer(modifier = Modifier.width(5.dp))
-//            Text(text = selectedCountry.code, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onBackground)
-//        }
-//
-//        DropdownMenu(
-//            expanded = expanded,
-//            onDismissRequest = { expanded = false },
-//            modifier = Modifier.background(MaterialTheme.colorScheme.surface)
-//        ) {
-//            countryCodes.forEach { country ->
-//                DropdownMenuItem(
-//                    text = {
-//                        Row(verticalAlignment = Alignment.CenterVertically) {
-//                            Text(text = country.flag, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurface)
-//                            Spacer(modifier = Modifier.width(8.dp))
-//                            Text(text = country.code, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurface)
-//                        }
-//                    },
-//                    onClick = {
-//                        onCodeSelected(country.code)
-//                        expanded = false
-//                    }
-//                )
-//            }
-//        }
-//    }
-//}
-//
-//// Helper extension function لو مش متعريّفة برة
-//fun Modifier.noRippleClickable(onClick: () -> Unit): Modifier = composed {
-//    clickable(indication = null, interactionSource = remember { MutableInteractionSource() }, onClick = onClick)
-//}
